@@ -14,12 +14,20 @@ include_once 'config.php';
 
     <script src="https://code.iconify.design/3/3.0.0/iconify.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <header>
         <div class="flex container-fluid text-center bg-green-300 py-3">
-            <a href="index.php" class="mx-4 flex flex-col text-gray-800">Accueil</a>
+            <?php
+            if (!isset($_GET['departement'])) {
+                $homeColor = "text-blue-400";
+            } else {
+                $homeColor = "text-gray-800";
+            }
+            ?>
+            <a href="index.php" class="Hlink mx-4 flex flex-col text-sm <?= $homeColor ?>">Accueil</a>
             <?php
             $sql = "SELECT (departement) FROM sites";
             $stmt = $conn->query($sql);
@@ -30,7 +38,12 @@ include_once 'config.php';
                 if (in_array($row['departement'], $department)) {
                     continue;
                 }
-                echo '<a href="index.php?departement=' . $row['departement'] . '" class="flex flex-col mx-2 text-gray-800">' . $row['departement'] . '</a>';
+                if (isset($_GET['departement']) && $_GET['departement'] == $row['departement']) {
+                    $depColor = "text-blue-400";
+                } else {
+                    $depColor = "text-gray-800";
+                }
+                echo '<a href="index.php?departement=' . $row['departement'] . '" class="Hlink flex flex-col mx-2 text-sm ' . $depColor . '">' . $row['departement'] . '</a>';
                 $department[] = $row['departement'];
             }
             ?>
